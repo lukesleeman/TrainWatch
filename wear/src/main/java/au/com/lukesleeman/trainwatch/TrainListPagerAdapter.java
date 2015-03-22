@@ -3,6 +3,7 @@ package au.com.lukesleeman.trainwatch;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.wearable.view.CardFragment;
 import android.support.wearable.view.FragmentGridPagerAdapter;
 
@@ -24,47 +25,43 @@ public class TrainListPagerAdapter extends FragmentGridPagerAdapter {
         this.trainList = trainList;
     }
 
-//    static final int[] BG_IMAGES = new int[] {
-//            R.drawable.debug_background_1, ...
-//    R.drawable.debug_background_5
-//};
-
-//
-//// Create a static set of pages in a 2D array
-//private final Page[][] PAGES = { ... };
-//
-//        // Override methods in FragmentGridPagerAdapter
-//        ...
-//        }
-
     // Obtain the UI fragment at the specified position
     @Override
     public Fragment getFragment(int row, int col) {
 
-        /*
-        Page page = PAGES[row][col];
-        String title =
-        page.titleRes != 0 ? context.getString(page.titleRes) : null;
-        String text =
-        page.textRes != 0 ? context.getString(page.textRes) : null;
-        */
         Train train = trainList.get(row);
 
-        CardFragment fragment = CardFragment.create(train.getDestination(), train.getMinutesToArrive() + " " + train.getPaltform());
+        String title = train.getMinutesToArrive() + " - " + train.getDestination();
+        String message = train.getTime()  + " " + train.getDestination();
+        message += "\n" + train.getPaltform() + "\n";
+        if(train.isExpress()){
+            message += "Running express";
+        }
+        else{
+            message += "Stopping all stations";
+        }
 
-        // Advanced settings (card gravity, card expansion/scrolling)
-//        fragment.setCardGravity(page.cardGravity);
-//        fragment.setExpansionEnabled(page.expansionEnabled);
-//        fragment.setExpansionDirection(page.expansionDirection);
-//        fragment.setExpansionFactor(page.expansionFactor);
+        CardFragment fragment = CardFragment.create(title, message);
         return fragment;
     }
 
     // Obtain the background image for the page at the specified position
-//    @Override
-//    public ImageReference getBackground(int row, int column) {
-//        return ImageReference.forDrawable(BG_IMAGES[row % BG_IMAGES.length]);
-//    }
+    @Override
+    public Drawable getBackgroundForPage(int row, int column) {
+        String destination = trainList.get(row).getDestination().toLowerCase();
+        if(destination.indexOf("flinder st") != -1){
+            return context.getDrawable(R.raw.flinders_bg);
+        }
+        else if(destination.indexOf("werribee") != -1){
+            return context.getDrawable(R.raw.werribee_bg);
+        }
+        else if(destination.indexOf("williamstown") != -1){
+            return context.getDrawable(R.raw.williamstown_bg);
+        }
+        else {
+            return context.getDrawable(R.raw.train_bg);
+        }
+    }
 
     @Override
     public int getRowCount() {
@@ -76,5 +73,4 @@ public class TrainListPagerAdapter extends FragmentGridPagerAdapter {
     public int getColumnCount(int rowNum) {
         return 1;
     }
-
 }
