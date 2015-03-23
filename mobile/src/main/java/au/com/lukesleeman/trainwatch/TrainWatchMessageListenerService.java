@@ -30,8 +30,8 @@ public class TrainWatchMessageListenerService extends WearableListenerService {
 
             // Build a list of trains
             List<Train> trains = new ArrayList<>();
-            trains.add(new Train("Flinder st", "Platform 1", false));
-            trains.add(new Train("Flinder st", "Platform 1", true));
+            trains.add(new Train("Flinders st", "Platform 1", false));
+            trains.add(new Train("Flinders st", "Platform 1", true));
             trains.add(new Train("Werribee", "Platform 2", false));
             trains.add(new Train("Williamstown", "Platform 2", false));
 
