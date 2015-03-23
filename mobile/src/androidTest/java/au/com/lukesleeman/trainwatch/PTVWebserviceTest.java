@@ -18,7 +18,7 @@ public class PTVWebserviceTest extends AndroidTestCase {
 
         assertTrue(result.isDatabaseOK());
         assertTrue(result.isMemcacheOK());
-        assertTrue(result.isClientClockOK());
         assertTrue(result.isSecurityTokenOK());
+        assertTrue(result.isClientClockOK());
     }
 }
