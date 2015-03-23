@@ -1,7 +1,7 @@
 package au.com.lukesleeman.trainwatch.webservice;
 
 /**
- * Created by luke on 23/03/15.
+ * A stop results, returned as part of the nearby stops API.
  */
 public class StopResult {
 

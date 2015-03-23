@@ -3,7 +3,7 @@ package au.com.lukesleeman.trainwatch.webservice;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Represents a stop from the neaby stops API
+ * Represents a stop from the nearby stops API
  */
 public class Stop {
 

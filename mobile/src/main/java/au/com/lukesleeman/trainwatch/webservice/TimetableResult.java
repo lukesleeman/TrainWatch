@@ -1,7 +1,7 @@
 package au.com.lukesleeman.trainwatch.webservice;
 
 /**
- * Created by luke on 23/03/15.
+ * The timetable result returned as part of the broad next departures api
  */
 public class TimetableResult {
 
