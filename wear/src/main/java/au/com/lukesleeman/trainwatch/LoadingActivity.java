@@ -1,6 +1,12 @@
 package au.com.lukesleeman.trainwatch;
 
 import android.app.Activity;
+import android.util.Log;
+
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Wearable;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -10,8 +16,9 @@ import org.androidannotations.annotations.UiThread;
 
 import java.util.List;
 
+import au.com.lukesleeman.utils.LogTags;
+import au.com.lukesleeman.utils.WearUtils;
 import au.com.lukesleeman.utils.domain.Train;
-import au.com.lukesleeman.trainwatch.service.TrainWatchService;
 
 /**
  * Displays a loading screen while we do all the stuff - get a location, fetch trains, etc
@@ -19,18 +26,43 @@ import au.com.lukesleeman.trainwatch.service.TrainWatchService;
 @EActivity(R.layout.activity_loading)
 public class LoadingActivity extends Activity {
 
-    @Bean
-    protected TrainWatchService service;
-
     @AfterViews
     protected void setupUi(){
         loadStuff();
     }
 
+    private GoogleApiClient client;
+
     @Background
     protected void loadStuff(){
-        service.sendGetTrainsMessage();
-//        showResults(service.getNextTrains());
+
+        client = new GoogleApiClient.Builder(this)
+                // Request access only to the Wearable API
+                .addApi(Wearable.API)
+                .build();
+
+        if(client.blockingConnect().isSuccess()) {
+
+            Log.i(LogTags.UTILS, "Successfully connected, adding listener");
+
+            Wearable.MessageApi.addListener(client, new MessageApi.MessageListener() {
+                @Override
+                public void onMessageReceived(MessageEvent messageEvent) {
+                    Log.i(LogTags.WEAR, "GOT RESPONSE MESSAGE!  YAY " + messageEvent.getPath());
+                }
+            });
+
+            WearUtils.sendMessage("/get-trains", new byte[0], this);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(client != null){
+            client.disconnect();
+        }
+
+        super.onDestroy();
     }
 
     @UiThread

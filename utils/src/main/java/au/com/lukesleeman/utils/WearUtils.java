@@ -34,7 +34,7 @@ public class WearUtils {
             String firstNode = nodes.get(0).getId();
 
             // Send the message
-            MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(googleApiClient, firstNode, "/get-trains", new byte[0]).await();
+            MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(googleApiClient, firstNode, path, messageConents).await();
             if (!result.getStatus().isSuccess()) {
                 Log.e(LogTags.UTILS, "Failed to send message with status code: "
                         + result.getStatus().getStatusCode());
