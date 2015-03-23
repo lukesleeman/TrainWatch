@@ -40,5 +40,8 @@ dependencies {
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
 
+    // Google gson for json parsing
+    compile 'com.google.code.gson:gson:2.2.4'
+
     compile project(':utils')
 }
