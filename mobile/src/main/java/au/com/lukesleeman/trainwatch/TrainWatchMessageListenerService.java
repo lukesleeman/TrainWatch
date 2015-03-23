@@ -13,7 +13,6 @@ import org.androidannotations.annotations.EService;
 @EService
 public class TrainWatchMessageListenerService extends WearableListenerService {
 
-
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         super.onMessageReceived(messageEvent);
