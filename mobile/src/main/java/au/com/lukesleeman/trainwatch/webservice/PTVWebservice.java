@@ -81,7 +81,7 @@ public class PTVWebservice {
         StopResult [] stops = nearbyStations(latitude, longitude);
         StopResult station = null;
         for(StopResult stop : stops){
-            if(stop.getType().equals("train")){
+            if(stop.getResult().getTransportType().equals("train")){
                 station = stop;
                 break;
             }

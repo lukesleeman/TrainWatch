@@ -3,10 +3,13 @@ package au.com.lukesleeman.trainwatch;
 
 import android.test.AndroidTestCase;
 
+import java.util.List;
+
 import au.com.lukesleeman.trainwatch.webservice.HealthCheckResult;
 import au.com.lukesleeman.trainwatch.webservice.PTVWebservice;
 import au.com.lukesleeman.trainwatch.webservice.StopResult;
 import au.com.lukesleeman.trainwatch.webservice.TimetableResult;
+import au.com.lukesleeman.utils.domain.Train;
 
 /**
  * Tests for connecting to the PTV webservice
@@ -25,7 +28,7 @@ public class PTVWebserviceTest extends AndroidTestCase {
     }
 
     public void testStopsNearby() throws Exception {
-        // Locaiton of my house!
+        // Location of my house!
         double latitude = -37.8605974;
         double longitude = 144.743913;
 
@@ -50,6 +53,18 @@ public class PTVWebserviceTest extends AndroidTestCase {
         TimetableResult departures = PTVWebservice.nextDepartures(1225);
         assertNotNull(departures);
         assertEquals(20, departures.getValues().length);
+    }
+
+    public void testGetTrains() throws Exception{
+        // Location of my house!
+        double latitude = -37.8605974;
+        double longitude = 144.743913;
+
+        List<Train> trains = PTVWebservice.nextTrains(latitude, longitude);
+
+        assertNotNull(trains);
+        assertEquals(20, trains.size());
+
     }
 
 

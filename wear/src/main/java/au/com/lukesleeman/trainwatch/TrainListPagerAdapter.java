@@ -48,7 +48,7 @@ public class TrainListPagerAdapter extends FragmentGridPagerAdapter {
     @Override
     public Drawable getBackgroundForPage(int row, int column) {
         String destination = trainList.get(row).getDestination().toLowerCase();
-        if(destination.indexOf("flinder st") != -1){
+        if(destination.indexOf("flinders") != -1){
             return context.getDrawable(R.raw.flinders_bg);
         }
         else if(destination.indexOf("werribee") != -1){
