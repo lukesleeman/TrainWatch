@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +21,8 @@ import java.util.TimeZone;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
+import au.com.lukesleeman.utils.domain.Train;
 
 /**
  * Static methods for connecting to the PTV webservice.
@@ -64,6 +66,43 @@ public class PTVWebservice {
         Gson gson = new Gson();
         return gson.fromJson(reader, TimetableResult.class);
     }
+
+    /**
+     * Given a lat/long find the next trains to depart from the nearest station
+     *
+     * @param latitude
+     * @param longitude
+     * @return
+     * @throws IOException
+     */
+    public static List<Train> nextTrains(double latitude, double longitude) throws Exception {
+
+        // First find our nearest station
+        StopResult [] stops = nearbyStations(latitude, longitude);
+        StopResult station = null;
+        for(StopResult stop : stops){
+            if(stop.getType().equals("train")){
+                station = stop;
+                break;
+            }
+        }
+
+        if(station == null){
+            throw new Exception("No nearby stations");
+        }
+
+        // Get the upcoming departures
+        TimetableResult departures = nextDepartures(station.getResult().getStopId());
+
+        // Transform them into trains
+        List<Train> trains = new ArrayList<>();
+        for(TimetableValue departure : departures.getValues()){
+            trains.add(new Train(departure.getRun().getDestinationName(), station.getResult().getLocationName(), 0, departure.getRun().getNumSkipped() > 0));
+        }
+
+        return trains;
+    }
+
 
     /**
      * Generates a signature using the HMAC-SHA1 algorithm

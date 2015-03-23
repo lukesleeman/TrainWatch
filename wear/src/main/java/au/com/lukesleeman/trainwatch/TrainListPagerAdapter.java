@@ -33,7 +33,6 @@ public class TrainListPagerAdapter extends FragmentGridPagerAdapter {
 
         String title = train.getMinutesToArrive() + " - " + train.getDestination();
         String message = train.getTime()  + " " + train.getDestination();
-        message += "\n" + train.getPaltform() + "\n";
         if(train.isExpress()){
             message += "Running express";
         }

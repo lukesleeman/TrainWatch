@@ -14,6 +14,7 @@ import org.androidannotations.annotations.EService;
 import java.util.ArrayList;
 import java.util.List;
 
+import au.com.lukesleeman.trainwatch.webservice.PTVWebservice;
 import au.com.lukesleeman.utils.LogTags;
 import au.com.lukesleeman.utils.WearUtils;
 import au.com.lukesleeman.utils.domain.Train;
@@ -37,7 +38,8 @@ public class TrainWatchMessageListenerService extends WearableListenerService {
                 Location location = getLastLocation();
 
                 // Use that to try and get the nearest stations
-
+                List<Train> trains = PTVWebservice.nextTrains(location.getLatitude(), location.getLongitude());
+                /*
 
 
                 // Build a list of trains
@@ -46,6 +48,7 @@ public class TrainWatchMessageListenerService extends WearableListenerService {
                 trains.add(new Train("Flinders st", "Platform 1", true));
                 trains.add(new Train("Werribee", "Platform 2", false));
                 trains.add(new Train("Williamstown", "Platform 2", false));
+                */
 
                 // Send a message back ...
                 GoogleApiClient client = WearUtils.getConnectedWearClient(getApplicationContext());

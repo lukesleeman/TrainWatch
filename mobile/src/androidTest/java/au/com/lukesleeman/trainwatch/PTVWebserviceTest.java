@@ -7,7 +7,6 @@ import au.com.lukesleeman.trainwatch.webservice.HealthCheckResult;
 import au.com.lukesleeman.trainwatch.webservice.PTVWebservice;
 import au.com.lukesleeman.trainwatch.webservice.StopResult;
 import au.com.lukesleeman.trainwatch.webservice.TimetableResult;
-import au.com.lukesleeman.trainwatch.webservice.TimetableValues;
 
 /**
  * Tests for connecting to the PTV webservice
@@ -50,6 +49,8 @@ public class PTVWebserviceTest extends AndroidTestCase {
 
         TimetableResult departures = PTVWebservice.nextDepartures(1225);
         assertNotNull(departures);
-        assertEquals(30, departures.getValues().length);
+        assertEquals(20, departures.getValues().length);
     }
+
+
 }

@@ -5,9 +5,9 @@ package au.com.lukesleeman.trainwatch.webservice;
  */
 public class TimetableResult {
 
-    private TimetableValues [] values;
+    private TimetableValue[] values;
 
-    public TimetableValues[] getValues() {
+    public TimetableValue[] getValues() {
         return values;
     }
 }
