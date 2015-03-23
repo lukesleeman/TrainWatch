@@ -64,7 +64,7 @@ public class LoadingActivity extends Activity {
                 }
             });
 
-            WearUtils.sendMessage("/get-trains", new byte[0], this);
+            WearUtils.sendMessage("/get-trains", new byte[0], client);
         }
     }
 
