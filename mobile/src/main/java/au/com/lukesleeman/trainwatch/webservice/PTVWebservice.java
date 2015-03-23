@@ -33,15 +33,7 @@ public class PTVWebservice {
     public static HealthCheckResult healthCheck() throws IOException {
 
         String url = "/v2/healthcheck";
-        /*
         url += "?timestamp=" +fromCalendar(Calendar.getInstance());
-        url += DEV_ID_PARAM;
-
-        String sig = hmacSha1(url, KEY);
-        url += "&signature=" + sig;
-
-        url = BASE_URL + url;
-        */
         url = generateCompleteURLWithSignature(KEY, url, DEV_ID);
 
         Reader reader = new InputStreamReader(new URL(url).openConnection().getInputStream());
