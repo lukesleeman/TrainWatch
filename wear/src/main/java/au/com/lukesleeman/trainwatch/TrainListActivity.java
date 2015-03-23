@@ -10,7 +10,7 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
-import au.com.lukesleeman.trainwatch.domain.Train;
+import au.com.lukesleeman.utils.domain.Train;
 
 /**
  * Displays a list of trains, which were loaded by the LoadingActivity.

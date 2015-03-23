@@ -9,7 +9,7 @@ import android.support.wearable.view.FragmentGridPagerAdapter;
 
 import java.util.List;
 
-import au.com.lukesleeman.trainwatch.domain.Train;
+import au.com.lukesleeman.utils.domain.Train;
 
 /**
  * Adapter for creating a list of trains leaving a station.

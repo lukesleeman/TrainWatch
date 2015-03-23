@@ -10,7 +10,9 @@ import org.androidannotations.annotations.EService;
 import java.util.ArrayList;
 import java.util.List;
 
-import au.com.lukesleeman.trainwatch.domain.Train;
+import au.com.lukesleeman.utils.LogTags;
+import au.com.lukesleeman.utils.WearUtils;
+import au.com.lukesleeman.utils.domain.Train;
 
 /**
  * A WearableListenerService which listens for messages from our watch
@@ -24,7 +26,7 @@ public class TrainWatchMessageListenerService extends WearableListenerService {
 
         Log.i(LogTags.APP, "Received message " + messageEvent.toString());
 
-        if (messageEvent.getPath().equals("get-trains")) {
+        if (messageEvent.getPath().equals("/get-trains")) {
 
             // Build a list of trains
             List<Train> trains = new ArrayList<>();
@@ -34,8 +36,7 @@ public class TrainWatchMessageListenerService extends WearableListenerService {
             trains.add(new Train("Williamstown", "Platform 2", false));
 
             // Start the long and ardious process of sending the message back ...
+            WearUtils.sendMessage("got-trains", new byte[0], getApplicationContext());
         }
     }
-
-
 }

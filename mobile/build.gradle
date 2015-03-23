@@ -39,4 +39,6 @@ dependencies {
     // Android annotations
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
+
+    compile project(':utils')
 }

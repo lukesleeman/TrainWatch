@@ -1,4 +1,4 @@
-package au.com.lukesleeman.trainwatch.domain;
+package au.com.lukesleeman.utils.domain;
 
 import java.io.Serializable;
 
