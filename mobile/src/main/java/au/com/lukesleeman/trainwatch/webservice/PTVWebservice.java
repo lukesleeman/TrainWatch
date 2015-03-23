@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -15,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.crypto.Mac;
@@ -42,12 +44,25 @@ public class PTVWebservice {
         return gson.fromJson(reader, HealthCheckResult.class);
     }
 
-    public static void nearbyStations(double latitude, double longitude){
+    public static StopResult[] nearbyStations(double latitude, double longitude) throws IOException {
+        String url = "/v2/nearme/latitude/" + latitude + "/longitude/" + longitude;
+        url = generateCompleteURLWithSignature(KEY, url, DEV_ID);
 
+        Reader reader = new InputStreamReader(new URL(url).openConnection().getInputStream());
+
+        Gson gson = new Gson();
+        return gson.fromJson(reader, StopResult[].class);
     }
 
-    public static void nextDepartures(){
+    public static TimetableResult nextDepartures(int stopId) throws IOException {
+        String url = "/v2/mode/0/stop/"+stopId +"/departures/by-destination/limit/10";
+        url = generateCompleteURLWithSignature(KEY, url, DEV_ID);
 
+
+        Reader reader = new InputStreamReader(new URL(url).openConnection().getInputStream());
+
+        Gson gson = new Gson();
+        return gson.fromJson(reader, TimetableResult.class);
     }
 
     /**
