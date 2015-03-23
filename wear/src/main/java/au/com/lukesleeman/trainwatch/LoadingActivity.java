@@ -35,15 +35,13 @@ public class LoadingActivity extends Activity {
 
     @AfterViews
     protected void setupUi(){
-//        loadStuff();
-
-        service.sendGetTrainsMessage();
-
+        loadStuff();
     }
 
     @Background
     protected void loadStuff(){
-        showResults(service.getNextTrains());
+        service.sendGetTrainsMessage();
+//        showResults(service.getNextTrains());
     }
 
     @UiThread
