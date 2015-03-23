@@ -14,6 +14,7 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 
+import java.io.IOException;
 import java.util.List;
 
 import au.com.lukesleeman.utils.LogTags;
@@ -48,7 +49,18 @@ public class LoadingActivity extends Activity {
             Wearable.MessageApi.addListener(client, new MessageApi.MessageListener() {
                 @Override
                 public void onMessageReceived(MessageEvent messageEvent) {
-                    Log.i(LogTags.WEAR, "GOT RESPONSE MESSAGE!  YAY " + messageEvent.getPath());
+                    Log.i(LogTags.WEAR, "Got response message" + messageEvent.getPath());
+                    List<Train> trains = null;
+                    try {
+                        trains = WearUtils.bytesToTrains(messageEvent.getData());
+                    }
+                    catch (Exception e) {
+                        Log.e(LogTags.UTILS, "Error receiving trains message", e);
+                    }
+
+
+                    Log.i(LogTags.WEAR, "Message includes " + trains.size() + " trains");
+                    showResults(trains);
                 }
             });
 

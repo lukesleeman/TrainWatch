@@ -7,6 +7,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 import org.androidannotations.annotations.EService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,12 @@ public class TrainWatchMessageListenerService extends WearableListenerService {
             trains.add(new Train("Williamstown", "Platform 2", false));
 
             // Start the long and ardious process of sending the message back ...
-            WearUtils.sendMessage("got-trains", new byte[0], getApplicationContext());
+            try {
+                WearUtils.sendMessage("got-trains", WearUtils.trainsToBytes(trains), getApplicationContext());
+            }
+            catch (IOException e) {
+                Log.e(LogTags.APP, "Error sending trains", e);
+            }
         }
     }
 }
