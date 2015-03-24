@@ -50,21 +50,29 @@ public class LoadingActivity extends Activity {
                 @Override
                 public void onMessageReceived(MessageEvent messageEvent) {
                     Log.i(LogTags.WEAR, "Got response message" + messageEvent.getPath());
-                    List<Train> trains = null;
-                    try {
-                        trains = WearUtils.bytesToTrains(messageEvent.getData());
-                    }
-                    catch (Exception e) {
-                        Log.e(LogTags.UTILS, "Error receiving trains message", e);
-                    }
 
-
-                    Log.i(LogTags.WEAR, "Message includes " + trains.size() + " trains");
-                    showResults(trains);
+                    if(messageEvent.getPath().equals("got-trains")){
+                        try {
+                            List<Train> trains = WearUtils.bytesToTrains(messageEvent.getData());
+                            Log.i(LogTags.WEAR, "Message includes " + trains.size() + " trains");
+                            showResults(trains);
+                        }
+                        catch (Exception e) {
+                            Log.e(LogTags.UTILS, "Error receiving trains message", e);
+                            showError("Error receiving trains from phone");
+                        }
+                    }
+                    else if(messageEvent.getPath().equals("got-error")){
+                        String error = new String(messageEvent.getData());
+                        showError(error);
+                    }
                 }
             });
 
             WearUtils.sendMessage("/get-trains", new byte[0], client);
+        }
+        else{
+            showError("Couldn't connect to phone");
         }
     }
 
@@ -80,6 +88,12 @@ public class LoadingActivity extends Activity {
     @UiThread
     protected void showResults(List<Train> trains){
         TrainListActivity_.intent(this).trainList(trains).start();
+        finish();
+    }
+
+    @UiThread
+    protected void showError(String error){
+//        TrainListActivity_.intent(this).trainList(trains).start();
         finish();
     }
 }

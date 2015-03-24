@@ -97,8 +97,6 @@ public class PTVWebservice {
         TimetableResult departures = nextDepartures(station.getResult().getStopId());
 
         // Transform them into trains
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-
         List<Train> trains = new ArrayList<>();
         for(TimetableValue departure : departures.getValues()){
             trains.add(new Train(
@@ -106,6 +104,10 @@ public class PTVWebservice {
                     station.getResult().getLocationName(),
                     localTimeFromUtcString(departure.getTimeUtc()),
                     departure.getRun().getNumSkipped() > 0));
+        }
+
+        if(trains.isEmpty()){
+            throw new Exception("No trains at nearest station!");
         }
 
         return trains;

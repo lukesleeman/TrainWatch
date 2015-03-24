@@ -37,6 +37,10 @@ public class TrainWatchMessageListenerService extends WearableListenerService {
                 // Get our lat/long
                 Location location = getLastLocation();
 
+                if(location == null){
+                    throw new Exception("Couldn't determine your location");
+                }
+
                 // Use that to try and get the nearest stations
 
                 // flinder st
@@ -51,6 +55,15 @@ public class TrainWatchMessageListenerService extends WearableListenerService {
             }
             catch (Exception e) {
                 Log.e(LogTags.APP, "Error sending trains", e);
+
+                try{
+                    GoogleApiClient client = WearUtils.getConnectedWearClient(getApplicationContext());
+                    WearUtils.sendMessage("got-error", e.getMessage().getBytes(), client);
+                    client.disconnect();
+                }
+                catch (Exception e1){
+                    Log.e(LogTags.APP, "Error sending error message", e1);
+                }
             }
         }
     }
