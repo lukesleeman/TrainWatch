@@ -12,6 +12,7 @@ public class TimetableValue {
     private String timeUtc;
 
     private TimetableRun run;
+    private TimetablePlatform platform;
 
     public String getTimeUtc() {
         return timeUtc;
@@ -19,5 +20,9 @@ public class TimetableValue {
 
     public TimetableRun getRun() {
         return run;
+    }
+
+    public TimetablePlatform getPlatform() {
+        return platform;
     }
 }

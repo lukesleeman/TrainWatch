@@ -62,18 +62,12 @@ public class PTVWebservice {
         url = generateCompleteURLWithSignature(KEY, url, DEV_ID);
 
 
-//        Reader reader = new InputStreamReader(new URL(url).openConnection().getInputStream());
-
-        String string = convertStreamToString(new URL(url).openConnection().getInputStream());
+        Reader reader = new InputStreamReader(new URL(url).openConnection().getInputStream());
 
         Gson gson = new Gson();
-        return gson.fromJson(string, TimetableResult.class);
+        return gson.fromJson(reader, TimetableResult.class);
     }
 
-    static String convertStreamToString(java.io.InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
-    }
 
     /**
      * Given a lat/long find the next trains to depart from the nearest station
@@ -108,7 +102,7 @@ public class PTVWebservice {
         List<Train> trains = new ArrayList<>();
         for(TimetableValue departure : departures.getValues()){
             trains.add(new Train(
-                    departure.getRun().getDestinationName(),
+                    departure.getPlatform().getDirection().getDirectionName(),
                     station.getResult().getLocationName(),
                     localTimeFromUtcString(departure.getTimeUtc()),
                     departure.getRun().getNumSkipped() > 0));
