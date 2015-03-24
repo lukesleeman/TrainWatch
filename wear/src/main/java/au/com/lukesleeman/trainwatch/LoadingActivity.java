@@ -58,7 +58,7 @@ public class LoadingActivity extends Activity {
                             showResults(trains);
                         }
                         catch (Exception e) {
-                            Log.e(LogTags.UTILS, "Error receiving trains message", e);
+                            Log.e(LogTags.WEAR, "Error receiving trains message", e);
                             showError("Error receiving trains from phone");
                         }
                     }
@@ -69,7 +69,13 @@ public class LoadingActivity extends Activity {
                 }
             });
 
-            WearUtils.sendMessage("/get-trains", new byte[0], client);
+            try{
+                WearUtils.sendMessage("/get-trains", new byte[0], client);
+            }
+            catch (IOException e){
+                Log.e(LogTags.WEAR, "Error sending train request message", e);
+                showError("Couldn't connect to phone");
+            }
         }
         else{
             showError("Couldn't connect to phone");
@@ -93,7 +99,7 @@ public class LoadingActivity extends Activity {
 
     @UiThread
     protected void showError(String error){
-//        TrainListActivity_.intent(this).trainList(trains).start();
+        ErrorActivity_.intent(this).error(error).start();
         finish();
     }
 }

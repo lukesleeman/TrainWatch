@@ -41,11 +41,15 @@ public class WearUtils {
         }
     }
 
-    public static void sendMessage(String path, byte [] messageConents, GoogleApiClient googleApiClient){
+    public static void sendMessage(String path, byte [] messageConents, GoogleApiClient googleApiClient) throws IOException{
         Log.i(LogTags.UTILS, "Getting nodes");
 
         // Get the nodes
         List<Node> nodes = Wearable.NodeApi.getConnectedNodes(googleApiClient).await().getNodes();
+
+        if(nodes.isEmpty()){
+            throw new IOException("Couldn't connect to device");
+        }
 
         Log.i(LogTags.UTILS, "Found " + nodes.size() + " nodes");
         String firstNode = nodes.get(0).getId();
@@ -55,6 +59,7 @@ public class WearUtils {
         if (!result.getStatus().isSuccess()) {
             Log.e(LogTags.UTILS, "Failed to send message with status code: "
                     + result.getStatus().getStatusCode());
+            throw new IOException("Error sending message to device");
         }
         else {
             Log.e(LogTags.UTILS, "Success sending message " + path + " with status code: "

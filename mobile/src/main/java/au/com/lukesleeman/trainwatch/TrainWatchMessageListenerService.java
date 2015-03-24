@@ -36,7 +36,6 @@ public class TrainWatchMessageListenerService extends WearableListenerService {
             try {
                 // Get our lat/long
                 Location location = getLastLocation();
-
                 if(location == null){
                     throw new Exception("Couldn't determine your location");
                 }
