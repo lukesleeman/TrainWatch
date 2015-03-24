@@ -41,10 +41,8 @@ public class TrainWatchMessageListenerService extends WearableListenerService {
                 }
 
                 // Use that to try and get the nearest stations
-
-                // flinder st
-//                List<Train> trains = PTVWebservice.nextTrains(-37.817119, 144.969458);
-                List<Train> trains = PTVWebservice.nextTrains(location.getLatitude(), location.getLongitude());
+                List<Train> trains = PTVWebservice.nextTrains(location.getLatitude(),
+                        location.getLongitude());
 
 
                 // Send a message back ...

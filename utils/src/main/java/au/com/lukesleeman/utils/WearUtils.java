@@ -37,11 +37,13 @@ public class WearUtils {
             return googleApiClient;
         }
         else {
-            throw new Exception("Error getting play services client - error code " + result.getErrorCode());
+            throw new Exception("Error getting play services client - error code "
+                    + result.getErrorCode());
         }
     }
 
-    public static void sendMessage(String path, byte [] messageConents, GoogleApiClient googleApiClient) throws IOException{
+    public static void sendMessage(String path, byte [] messageConents, GoogleApiClient googleApiClient)
+            throws IOException{
         Log.i(LogTags.UTILS, "Getting nodes");
 
         // Get the nodes
@@ -55,7 +57,9 @@ public class WearUtils {
         String firstNode = nodes.get(0).getId();
 
         // Send the message
-        MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(googleApiClient, firstNode, path, messageConents).await();
+        MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(
+                googleApiClient, firstNode, path, messageConents).await();
+
         if (!result.getStatus().isSuccess()) {
             Log.e(LogTags.UTILS, "Failed to send message with status code: "
                     + result.getStatus().getStatusCode());

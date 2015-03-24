@@ -42,9 +42,6 @@ public class TrainListPagerAdapter extends FragmentGridPagerAdapter {
         message += " Departing " + train.getDepartingFrom() + " in " + train.getMinutesToArrive() + ".";
 
         CardFragment fragment = CardFragment.create(title, message);
-        fragment.setExpansionEnabled(true);
-        fragment.setExpansionFactor(1);
-        fragment.setExpansionDirection(CardFragment.EXPAND_UP);
         return fragment;
     }
 
