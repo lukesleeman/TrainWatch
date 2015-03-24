@@ -38,17 +38,10 @@ public class TrainWatchMessageListenerService extends WearableListenerService {
                 Location location = getLastLocation();
 
                 // Use that to try and get the nearest stations
-                List<Train> trains = PTVWebservice.nextTrains(location.getLatitude(), location.getLongitude());
-                /*
 
+                List<Train> trains = PTVWebservice.nextTrains(-37.817119, 144.969458);
+//                List<Train> trains = PTVWebservice.nextTrains(location.getLatitude(), location.getLongitude());
 
-                // Build a list of trains
-                List<Train> trains = new ArrayList<>();
-                trains.add(new Train("Flinders st", "Platform 1", false));
-                trains.add(new Train("Flinders st", "Platform 1", true));
-                trains.add(new Train("Werribee", "Platform 2", false));
-                trains.add(new Train("Williamstown", "Platform 2", false));
-                */
 
                 // Send a message back ...
                 GoogleApiClient client = WearUtils.getConnectedWearClient(getApplicationContext());

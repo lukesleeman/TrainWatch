@@ -12,6 +12,7 @@ import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,7 +38,7 @@ public class PTVWebservice {
     public static HealthCheckResult healthCheck() throws IOException {
 
         String url = "/v2/healthcheck";
-        url += "?timestamp=" +fromCalendar(Calendar.getInstance());
+        url += "?timestamp=" + utcTimeStringFromCalendar(Calendar.getInstance());
         url = generateCompleteURLWithSignature(KEY, url, DEV_ID);
 
         Reader reader = new InputStreamReader(new URL(url).openConnection().getInputStream());
@@ -61,10 +62,17 @@ public class PTVWebservice {
         url = generateCompleteURLWithSignature(KEY, url, DEV_ID);
 
 
-        Reader reader = new InputStreamReader(new URL(url).openConnection().getInputStream());
+//        Reader reader = new InputStreamReader(new URL(url).openConnection().getInputStream());
+
+        String string = convertStreamToString(new URL(url).openConnection().getInputStream());
 
         Gson gson = new Gson();
-        return gson.fromJson(reader, TimetableResult.class);
+        return gson.fromJson(string, TimetableResult.class);
+    }
+
+    static String convertStreamToString(java.io.InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
     }
 
     /**
@@ -95,9 +103,15 @@ public class PTVWebservice {
         TimetableResult departures = nextDepartures(station.getResult().getStopId());
 
         // Transform them into trains
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
         List<Train> trains = new ArrayList<>();
         for(TimetableValue departure : departures.getValues()){
-            trains.add(new Train(departure.getRun().getDestinationName(), station.getResult().getLocationName(), 0, departure.getRun().getNumSkipped() > 0));
+            trains.add(new Train(
+                    departure.getRun().getDestinationName(),
+                    station.getResult().getLocationName(),
+                    localTimeFromUtcString(departure.getTimeUtc()),
+                    departure.getRun().getNumSkipped() > 0));
         }
 
         return trains;
@@ -164,18 +178,17 @@ public class PTVWebservice {
      */
     private static String generateCompleteURLWithSignature(final String privateKey, final String uri, final int developerId)
     {
-
         String baseURL="http://timetableapi.ptv.vic.gov.au";
         StringBuffer url = new StringBuffer(baseURL).append(uri).append(uri.contains("?") ? "&" : "?").append("devid="+developerId).append("&signature="+generateSignature(privateKey, uri, developerId));
         return url.toString();
-
     }
 
+    private static final SimpleDateFormat UTC_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     /**
      * Transform Calendar to ISO 8601 UTC format string.
      */
-    private static String fromCalendar(final Calendar calendar) {
+    private static String utcTimeStringFromCalendar(final Calendar calendar) {
 
         // Convert to GMT (from http://stackoverflow.com/a/230383/1599946)
         Date date = calendar.getTime();
@@ -193,8 +206,27 @@ public class PTVWebservice {
         gmtCal.add(Calendar.MILLISECOND, -offsetFromUTC);
 
         // Transform to formatted string (from http://stackoverflow.com/a/10621553/1599946)
-        String formatted = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-                .format(gmtCal.getTime());
-        return formatted;
+        return UTC_DATE_FORMAT.format(gmtCal.getTime());
+    }
+
+    private static long localTimeFromUtcString(String dateString) throws ParseException {
+        // Get a date in UTC timezone
+        Date date = UTC_DATE_FORMAT.parse(dateString);
+
+        // Convert from UTC to local time
+        TimeZone tz = TimeZone.getDefault();
+
+        // Returns the number of milliseconds since January 1, 1970, 00:00:00 GMT
+        long msFromEpochGmt = date.getTime();
+
+        // Gives you the current offset in ms from GMT at the current date
+        int offsetFromUTC = tz.getOffset(msFromEpochGmt);
+
+        // Create a new calendar in GMT timezone, set to this date and add the offset
+        Calendar localCal = Calendar.getInstance();
+        localCal.setTime(date);
+        localCal.add(Calendar.MILLISECOND, offsetFromUTC);
+
+        return localCal.getTimeInMillis();
     }
 }

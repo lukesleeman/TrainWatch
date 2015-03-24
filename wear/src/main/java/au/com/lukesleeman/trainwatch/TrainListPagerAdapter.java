@@ -32,15 +32,19 @@ public class TrainListPagerAdapter extends FragmentGridPagerAdapter {
         Train train = trainList.get(row);
 
         String title = train.getMinutesToArrive() + " - " + train.getDestination();
-        String message = train.getTime()  + " " + train.getDestination();
+        String message = train.getTime(context)  + " " + train.getDestination();
         if(train.isExpress()){
-            message += "Running express";
+            message += ", Running express.";
         }
         else{
-            message += "Stopping all stations";
+            message += ", Stopping all stations.";
         }
+        message += " Departing " + train.getDepartingFrom() + " in " + train.getMinutesToArrive() + ".";
 
         CardFragment fragment = CardFragment.create(title, message);
+        fragment.setExpansionEnabled(true);
+        fragment.setExpansionFactor(1);
+        fragment.setExpansionDirection(CardFragment.EXPAND_UP);
         return fragment;
     }
 
@@ -56,6 +60,51 @@ public class TrainListPagerAdapter extends FragmentGridPagerAdapter {
         }
         else if(destination.indexOf("williamstown") != -1){
             return context.getDrawable(R.raw.williamstown_bg);
+        }
+        else if(destination.indexOf("southern cross") != -1){
+            return context.getDrawable(R.raw.southern_cross_bg);
+        }
+        else if(destination.indexOf("sandringham") != -1){
+            return context.getDrawable(R.raw.sandringham_bg);
+        }
+        else if(destination.indexOf("frankston") != -1){
+            return context.getDrawable(R.raw.frankston_bg);
+        }
+        else if(destination.indexOf("stony point") != -1){
+            return context.getDrawable(R.raw.stony_point_bg);
+        }
+        else if(destination.indexOf("pakenham") != -1){
+            return context.getDrawable(R.raw.pakenham_bg);
+        }
+        else if(destination.indexOf("cranbourne") != -1){
+            return context.getDrawable(R.raw.crainbourne_bg);
+        }
+        else if(destination.indexOf("glen waverley") != -1){
+            return context.getDrawable(R.raw.glen_waverly_bg);
+        }
+        else if(destination.indexOf("alamein") != -1){
+            return context.getDrawable(R.raw.alamein_bg);
+        }
+        else if(destination.indexOf("belgrave") != -1){
+            return context.getDrawable(R.raw.belgrave_bg);
+        }
+        else if(destination.indexOf("lilydale") != -1){
+            return context.getDrawable(R.raw.lilydale_bg);
+        }
+        else if(destination.indexOf("hurstbridge") != -1){
+            return context.getDrawable(R.raw.hurstbridge_bg);
+        }
+        else if(destination.indexOf("south morang") != -1){
+            return context.getDrawable(R.raw.south_morang_bg);
+        }
+        else if(destination.indexOf("upfield") != -1){
+            return context.getDrawable(R.raw.upfield_bg);
+        }
+        else if(destination.indexOf("craigieburn") != -1){
+            return context.getDrawable(R.raw.craigieburn_bg);
+        }
+        else if(destination.indexOf("sunbury") != -1){
+            return context.getDrawable(R.raw.sunbury_bg);
         }
         else {
             return context.getDrawable(R.raw.train_bg);
